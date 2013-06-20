@@ -1,11 +1,14 @@
 package org.es.butler.logic;
 
+import android.content.Context;
 import android.text.format.Time;
+
+import org.es.butler.R;
 
 /**
  * Created by Cyril Leroux on 18/06/13.
  * <p/>
- * This class defines all the needed logic concerning the time passed to the constructor.
+ * This class defines the interpretation logic of temporal data.
  */
 public class TimeLogic {
 
@@ -60,21 +63,22 @@ public class TimeLogic {
         return mTime.before(mMorning) || mTime.equals(mNight) || mTime.after(mNight);
     }
 
-    public String getPronunciation() {
-        return getPronunciationEn(mTime);
+    public String getPronunciation(Context context) {
+        return getPronunciationEn(mTime, context);
     }
 
-    private String getPronunciationEn(final Time time) {
+    private String getPronunciationEn(final Time time, Context context) {
         final int minute  = time.minute;
         int hour = get12hFormat(time.hour);
         int nextHour = get12hFormat(getNextHour(time.hour));
 
         final StringBuilder sb = new StringBuilder();
-        sb.append("Time is now ");
+
+        sb.append(context.getString(R.string.time_prefix)).append(" ");
         sb.append(get12hFormat(time.hour)).append(" ");
 
         if (time.minute > 0 && time.minute < 10) {
-            sb.append("o").append(time.minute);
+            sb.append("O ").append(time.minute);
         } else if (time.minute >= 10) {
             sb.append(time.minute);
         }
@@ -121,6 +125,6 @@ public class TimeLogic {
     }
 
     private String getSuffix(int hour24hFormat) {
-        return (hour24hFormat < 12) ? "am" : "pm";
+        return (hour24hFormat < 12) ? " A M." : " P M.";
     }
 }

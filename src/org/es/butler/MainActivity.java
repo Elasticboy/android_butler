@@ -110,7 +110,12 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         sayHello(time);
         sayTime(time);
 
-        mTTS.speak("You have no appointment today.", TextToSpeech.QUEUE_ADD, null);
+        // TODO : Change hard coded sentences with real values !
+        mTTS.speak("The temperature is 24 degrees Celsius.", TextToSpeech.QUEUE_ADD, null);
+        mTTS.speak("It's a bit rainy today. Don't forget to cover yourself.", TextToSpeech.QUEUE_ADD, null);
+        mTTS.speak("1 event found in your calendar.", TextToSpeech.QUEUE_ADD, null);
+        mTTS.speak("Your Jujitsu course is at 8 30 pm.", TextToSpeech.QUEUE_ADD, null);
+        //mTTS.speak("And you have no appointment today.", TextToSpeech.QUEUE_ADD, null);
     }
 
     private boolean cancelDailySpeech() {
@@ -154,7 +159,7 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
      */
     private void sayTime(final TimeLogic time) {
         mTTS.setSpeechRate(0.9f);
-        final String text = time.getPronunciation();
+        final String text = time.getPronunciation(getApplicationContext());
         if (text == null || text.isEmpty()) {
             Log.e(TAG, "sayTime(), couldn't get pronunciation.");
         }

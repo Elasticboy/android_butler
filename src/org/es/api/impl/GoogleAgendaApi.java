@@ -12,11 +12,13 @@ public class GoogleAgendaApi implements AgendaApi {
 
     @Override
     public List<AgendaEvent> checkTodayEvents() {
+        // TODO look for today's events.
         return null;
     }
 
     @Override
     public List<AgendaEvent> checkUpcomingEvent() {
+        // TODO look for upcoming events.
         return null;
     }
 }

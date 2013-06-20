@@ -10,6 +10,7 @@ public class WundergroundWeatherApi implements WeatherApi {
 
     @Override
     public WeatherData checkWeather() {
+        // TODO get prevision for the day
         return null;
     }
 }
