@@ -16,7 +16,10 @@ import org.es.api.WeatherApi;
 import org.es.api.factory.AgendaApiFactory;
 import org.es.api.factory.WeatherApiFactory;
 import org.es.butler.logic.TimeLogic;
+import org.es.butler.pojo.AgendaEvent;
+import org.es.butler.pojo.WeatherData;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -97,11 +100,11 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         }
 
         WeatherApi weather = WeatherApiFactory.getWeatherAPI();
-        weather.checkWeather();
+        WeatherData weatherData = weather.checkWeather();
 
         AgendaApi agenda = AgendaApiFactory.getAgendaApi();
-        agenda.checkTodayEvents();
-        agenda.checkUpcomingEvent();
+        List<AgendaEvent> todayEvents = agenda.checkTodayEvents();
+        List<AgendaEvent> upcomingEvents = agenda.checkUpcomingEvent();
 
         Time now = new Time();
         now.setToNow();
@@ -110,12 +113,9 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         sayHello(time);
         sayTime(time);
 
-        // TODO : Change hard coded sentences with real values !
-        mTTS.speak("The temperature is 24 degrees Celsius.", TextToSpeech.QUEUE_ADD, null);
-        mTTS.speak("It's a bit rainy today. Don't forget to cover yourself.", TextToSpeech.QUEUE_ADD, null);
-        mTTS.speak("1 event found in your calendar.", TextToSpeech.QUEUE_ADD, null);
-        mTTS.speak("Your Jujitsu course is at 8 30 pm.", TextToSpeech.QUEUE_ADD, null);
-        //mTTS.speak("And you have no appointment today.", TextToSpeech.QUEUE_ADD, null);
+        sayWeather(weatherData);
+        sayTodayEvents(todayEvents);
+        sayUpcomingEvents(upcomingEvents);
     }
 
     private boolean cancelDailySpeech() {
@@ -167,5 +167,22 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         mTTS.speak(text, TextToSpeech.QUEUE_ADD, null);
 
         mTTS.setSpeechRate(1f);
+    }
+
+    private void sayWeather(final WeatherData data) {
+        // TODO : Change hard coded sentences with real values !
+        mTTS.speak("The temperature is 24 degrees Celsius.", TextToSpeech.QUEUE_ADD, null);
+        mTTS.speak("It's a bit rainy today. Don't forget to cover yourself.", TextToSpeech.QUEUE_ADD, null);
+
+    }
+
+    private void sayTodayEvents(final List<AgendaEvent> events) {
+        // TODO : Change hard coded sentences with real values ! mTTS.speak("1 event found in your calendar.", TextToSpeech.QUEUE_ADD, null);
+        mTTS.speak("Your Jujitsu course is at 8 30 pm.", TextToSpeech.QUEUE_ADD, null);
+        //mTTS.speak("And you have no appointment today.", TextToSpeech.QUEUE_ADD, null);
+    }
+
+    private void sayUpcomingEvents(final List<AgendaEvent> events) {
+        // TODO : Change hard coded sentences with real values ! mTTS.speak("1 event found in your calendar.", TextToSpeech.QUEUE_ADD, null);
     }
 }
