@@ -16,6 +16,7 @@ import org.es.api.WeatherApi;
 import org.es.api.factory.AgendaApiFactory;
 import org.es.api.factory.WeatherApiFactory;
 import org.es.butler.logic.TimeLogic;
+import org.es.butler.logic.WeatherLogic;
 import org.es.butler.pojo.AgendaEvent;
 import org.es.butler.pojo.WeatherData;
 
@@ -99,12 +100,12 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
             return;
         }
 
-        WeatherApi weather = WeatherApiFactory.getWeatherAPI();
-        WeatherData weatherData = weather.checkWeather();
+        WeatherApi weatherApi = WeatherApiFactory.getWeatherAPI();
+        WeatherData weatherData = weatherApi.checkWeather();
 
-        AgendaApi agenda = AgendaApiFactory.getAgendaApi();
-        List<AgendaEvent> todayEvents = agenda.checkTodayEvents();
-        List<AgendaEvent> upcomingEvents = agenda.checkUpcomingEvent();
+        AgendaApi agendaApi = AgendaApiFactory.getAgendaApi();
+        List<AgendaEvent> todayEvents = agendaApi.checkTodayEvents();
+        List<AgendaEvent> upcomingEvents = agendaApi.checkUpcomingEvent();
 
         Time now = new Time();
         now.setToNow();
@@ -113,7 +114,9 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         sayHello(time);
         sayTime(time);
 
-        sayWeather(weatherData);
+        WeatherLogic weather = new WeatherLogic(weatherData);
+        sayWeather(weather);
+
         sayTodayEvents(todayEvents);
         sayUpcomingEvents(upcomingEvents);
     }
@@ -169,11 +172,13 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         mTTS.setSpeechRate(1f);
     }
 
-    private void sayWeather(final WeatherData data) {
-        // TODO : Change hard coded sentences with real values !
-        mTTS.speak("The temperature is 24 degrees Celsius.", TextToSpeech.QUEUE_ADD, null);
-        mTTS.speak("It's a bit rainy today. Don't forget to cover yourself.", TextToSpeech.QUEUE_ADD, null);
+    private void sayWeather(final WeatherLogic weather) {
+        final String text = weather.getPronunciation(getApplicationContext());
+        if (text == null || text.isEmpty()) {
+            Log.e(TAG, "sayWeather(), couldn't get pronunciation.");
+        }
 
+        mTTS.speak(text, TextToSpeech.QUEUE_ADD, null);
     }
 
     private void sayTodayEvents(final List<AgendaEvent> events) {
