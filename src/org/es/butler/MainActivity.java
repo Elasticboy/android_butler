@@ -15,8 +15,9 @@ import org.es.api.AgendaApi;
 import org.es.api.WeatherApi;
 import org.es.api.factory.AgendaApiFactory;
 import org.es.api.factory.WeatherApiFactory;
-import org.es.butler.logic.TimeLogic;
-import org.es.butler.logic.WeatherLogic;
+import org.es.butler.logic.impl.AgendaLogic;
+import org.es.butler.logic.impl.TimeLogic;
+import org.es.butler.logic.impl.WeatherLogic;
 import org.es.butler.pojo.AgendaEvent;
 import org.es.butler.pojo.WeatherData;
 
@@ -117,8 +118,10 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         WeatherLogic weather = new WeatherLogic(weatherData);
         sayWeather(weather);
 
-        sayTodayEvents(todayEvents);
-        sayUpcomingEvents(upcomingEvents);
+        AgendaLogic agendaLogicToday = new AgendaLogic(todayEvents);
+        AgendaLogic agendaLogicUpcoming = new AgendaLogic(upcomingEvents);
+        sayTodayEvents(agendaLogicToday);
+        sayUpcomingEvents(agendaLogicUpcoming);
     }
 
     private boolean cancelDailySpeech() {
@@ -162,11 +165,11 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
      */
     private void sayTime(final TimeLogic time) {
         mTTS.setSpeechRate(0.9f);
+
         final String text = time.getPronunciation(getApplicationContext());
         if (text == null || text.isEmpty()) {
             Log.e(TAG, "sayTime(), couldn't get pronunciation.");
         }
-
         mTTS.speak(text, TextToSpeech.QUEUE_ADD, null);
 
         mTTS.setSpeechRate(1f);
@@ -177,17 +180,25 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         if (text == null || text.isEmpty()) {
             Log.e(TAG, "sayWeather(), couldn't get pronunciation.");
         }
-
         mTTS.speak(text, TextToSpeech.QUEUE_ADD, null);
     }
 
-    private void sayTodayEvents(final List<AgendaEvent> events) {
-        // TODO : Change hard coded sentences with real values ! mTTS.speak("1 event found in your calendar.", TextToSpeech.QUEUE_ADD, null);
-        mTTS.speak("Your Jujitsu course is at 8 30 pm.", TextToSpeech.QUEUE_ADD, null);
-        //mTTS.speak("And you have no appointment today.", TextToSpeech.QUEUE_ADD, null);
+    private void sayTodayEvents(final AgendaLogic logic) {
+
+        final String text = logic.getPronunciation(getApplicationContext());
+        if (text == null || text.isEmpty()) {
+            Log.e(TAG, "sayTodayEvents(), couldn't get pronunciation.");
+        }
+        mTTS.speak(text, TextToSpeech.QUEUE_ADD, null);
     }
 
-    private void sayUpcomingEvents(final List<AgendaEvent> events) {
-        // TODO : Change hard coded sentences with real values ! mTTS.speak("1 event found in your calendar.", TextToSpeech.QUEUE_ADD, null);
+    private void sayUpcomingEvents(final AgendaLogic logic) {
+
+        final String text = logic.getPronunciation(getApplicationContext());
+        if (text == null || text.isEmpty()) {
+            Log.e(TAG, "sayUpcomingEvents(), couldn't get pronunciation.");
+        }
+        mTTS.speak(text, TextToSpeech.QUEUE_ADD, null);
+
     }
 }

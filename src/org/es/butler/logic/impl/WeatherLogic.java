@@ -1,9 +1,10 @@
-package org.es.butler.logic;
+package org.es.butler.logic.impl;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.text.format.Time;
 
+import org.es.butler.logic.PronunciationLogic;
 import org.es.butler.pojo.WeatherData;
 
 /**
@@ -11,7 +12,7 @@ import org.es.butler.pojo.WeatherData;
  * <p/>
  * This class defines the interpretation logic of weather data.
  */
-public class WeatherLogic {
+public class WeatherLogic implements PronunciationLogic {
 
     private WeatherData mWeatherData;
 
@@ -19,6 +20,7 @@ public class WeatherLogic {
         mWeatherData = data;
     }
 
+    @Override
     public String getPronunciation(Context context) {
         return getPronunciationEn(mWeatherData, context);
     }
@@ -26,5 +28,6 @@ public class WeatherLogic {
     private String getPronunciationEn(final WeatherData weather, Context context) {
         // TODO : Change hard coded sentences with real values !
        return "The temperature is 24 degrees Celsius." +
-       "It's a bit rainy today. Don't forget to cover yourself.";    }
+       "It's a bit rainy today. Don't forget to cover yourself.";
+    }
 }

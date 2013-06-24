@@ -1,16 +1,17 @@
-package org.es.butler.logic;
+package org.es.butler.logic.impl;
 
 import android.content.Context;
 import android.text.format.Time;
 
 import org.es.butler.R;
+import org.es.butler.logic.PronunciationLogic;
 
 /**
  * Created by Cyril Leroux on 18/06/13.
  * <p/>
  * This class defines the interpretation logic of temporal data.
  */
-public class TimeLogic {
+public class TimeLogic implements PronunciationLogic {
 
     private Time mTime;
     private Time mMorning;
@@ -63,6 +64,7 @@ public class TimeLogic {
         return mTime.before(mMorning) || mTime.equals(mNight) || mTime.after(mNight);
     }
 
+    @Override
     public String getPronunciation(Context context) {
         return getPronunciationEn(mTime, context);
     }
