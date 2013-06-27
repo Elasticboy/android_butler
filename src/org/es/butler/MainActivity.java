@@ -105,8 +105,8 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         WeatherData weatherData = weatherApi.checkWeather();
 
         AgendaApi agendaApi = AgendaApiFactory.getAgendaApi();
-        List<AgendaEvent> todayEvents = agendaApi.checkTodayEvents();
-        List<AgendaEvent> upcomingEvents = agendaApi.checkUpcomingEvent();
+        List<AgendaEvent> todayEvents = agendaApi.checkTodayEvents(getApplicationContext());
+        List<AgendaEvent> upcomingEvents = agendaApi.checkUpcomingEvent(getApplicationContext());
 
         Time now = new Time();
         now.setToNow();
