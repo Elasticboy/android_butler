@@ -139,6 +139,7 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
 
         String text = null;
 
+        // TODO move logic in TimeLogic#getHelloPronunciation
         if (time.isMorning()) {
             text = getString(R.string.good_morning);
 
