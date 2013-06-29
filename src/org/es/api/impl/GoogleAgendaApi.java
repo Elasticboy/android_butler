@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
+import android.text.format.Time;
 import android.util.Patterns;
 
 import org.es.api.AgendaApi;
@@ -39,6 +40,7 @@ public class GoogleAgendaApi implements AgendaApi {
 
     public static final String[] EVENT_PROJECTION = new String[] {
             Events.CALENDAR_ID,
+            Events.CALENDAR_DISPLAY_NAME,
             Events.TITLE,
             Events.DESCRIPTION,
             Events.DTSTART,
@@ -49,13 +51,14 @@ public class GoogleAgendaApi implements AgendaApi {
     };
     // The indices for the projection array above.
     private static final int PROJECTION_CALENDAR_ID_INDEX   = 0;
-    private static final int PROJECTION_TITLE_INDEX         = 1;
-    private static final int PROJECTION_DESCRIPTION_INDEX   = 2;
-    private static final int PROJECTION_START_DATE_INDEX    = 3;
-    private static final int PROJECTION_END_DATE_INDEX      = 4;
-    private static final int PROJECTION_LOCATION_INDEX      = 5;
-    private static final int PROJECTION_DURATION_INDEX      = 6;
-    private static final int PROJECTION_ALL_DAY_INDEX       = 7;
+    private static final int PROJECTION_CALENDAR_NAME_INDEX = 1;
+    private static final int PROJECTION_TITLE_INDEX         = 2;
+    private static final int PROJECTION_DESCRIPTION_INDEX   = 3;
+    private static final int PROJECTION_START_DATE_INDEX    = 4;
+    private static final int PROJECTION_END_DATE_INDEX      = 5;
+    private static final int PROJECTION_LOCATION_INDEX      = 6;
+    private static final int PROJECTION_DURATION_INDEX      = 7;
+    private static final int PROJECTION_ALL_DAY_INDEX       = 8;
 
 
     @Override
@@ -67,7 +70,17 @@ public class GoogleAgendaApi implements AgendaApi {
 //            return null;
 //        }
 
-        List<AgendaEvent> events = readCalendarEvent(context);
+        Time dayStart = new Time();
+        dayStart.setToNow();
+        dayStart.set(0, 0, 0, dayStart.monthDay, dayStart.month, dayStart.year);
+        dayStart.toMillis(false);
+
+        Time dayEnd = new Time();
+        dayEnd.setToNow();
+        dayEnd.set(59, 59, 23, dayEnd.monthDay, dayEnd.month, dayEnd.year);
+        dayEnd.toMillis(false);
+
+        return readCalendarEvent(context, dayStart.toMillis(false), dayEnd.toMillis(false));
 
 //        // Run query
 //        Uri uri = Calendars.CONTENT_URI;
@@ -95,14 +108,20 @@ public class GoogleAgendaApi implements AgendaApi {
 //
 //            getEvents()
 //        }
-
-        return events;
     }
 
     @Override
     public List<AgendaEvent> checkUpcomingEvent(Context context) {
-        // TODO look for upcoming events.
-        return null;
+
+        Time dayStart = new Time();
+        dayStart.setToNow();
+        dayStart.set(0, 0, 0, dayStart.monthDay, dayStart.month, dayStart.year);
+        dayStart.toMillis(false);
+
+        Time dayEnd = new Time();
+        dayEnd.set(dayStart.toMillis(false) + 86400000*8);
+
+        return readCalendarEvent(context, dayStart.toMillis(false), dayEnd.toMillis(false));
     }
 
 //    private String getOwnerAccount(Context context) {
@@ -117,17 +136,17 @@ public class GoogleAgendaApi implements AgendaApi {
 //        return null;
 //    }
 
-    public List<AgendaEvent> readCalendarEvent(Context context) {
-
-
-        ArrayList<String> nameOfEvent   = new ArrayList<String>();
-        ArrayList<String> startDates    = new ArrayList<String>();
-        ArrayList<String> endDates      = new ArrayList<String>();
-        ArrayList<String> descriptions  = new ArrayList<String>();
+    public List<AgendaEvent> readCalendarEvent(Context context, long startDate, long endDate) {
 
         Uri eventsUri = Events.CONTENT_URI;
         ContentResolver resolver = context.getContentResolver();
-        Cursor cursor = resolver.query(eventsUri, EVENT_PROJECTION, null, null, null);
+
+        String eventsSelection = "(("
+                + Events.DTSTART + " > ?) AND ("
+                + Events.DTEND + " < ?))";
+        String[] eventsSelectionArgs = new String[]{String.valueOf(startDate), String.valueOf(endDate)};
+
+        Cursor cursor = resolver.query(eventsUri, EVENT_PROJECTION, eventsSelection, eventsSelectionArgs, null);
 
         List<AgendaEvent> events = new ArrayList<>();
         AgendaEvent event;
@@ -135,8 +154,8 @@ public class GoogleAgendaApi implements AgendaApi {
         while (cursor.moveToNext()) {
             event = new AgendaEvent();
 
-            Calendar.getInstance().getTimeInMillis();
             event.setCalendarId(cursor.getLong(PROJECTION_CALENDAR_ID_INDEX));
+            event.setCalendarName(cursor.getString(PROJECTION_CALENDAR_NAME_INDEX));
             event.setTitle(cursor.getString(PROJECTION_TITLE_INDEX));
             event.setDescription(cursor.getString(PROJECTION_DESCRIPTION_INDEX));
             event.setStartDateMillis(cursor.getLong(PROJECTION_START_DATE_INDEX));

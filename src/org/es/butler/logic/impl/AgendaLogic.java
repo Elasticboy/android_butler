@@ -2,6 +2,7 @@ package org.es.butler.logic.impl;
 
 import android.content.Context;
 
+import org.es.butler.R;
 import org.es.butler.logic.PronunciationLogic;
 import org.es.butler.pojo.AgendaEvent;
 import org.es.butler.pojo.WeatherData;
@@ -25,7 +26,8 @@ public class AgendaLogic implements PronunciationLogic {
     }
 
     private String getPronunciationEn(final List<AgendaEvent> events, Context context) {
-        return "Your Jujitsu course is at 8 30 pm.";
+        int count = (events == null || events.isEmpty()) ? 0 : events.size();
+        return context.getString(R.plurals.appointment_count) + " Your Jujitsu course is at 8 30 pm.";
         //return "You have no appointment today.";
     }
 }

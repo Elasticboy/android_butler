@@ -9,6 +9,7 @@ import android.text.format.Time;
 public class AgendaEvent {
 
     private long mCalendarId;
+    private String mCalendarName;
     private String mTitle;
     private String mDescription;
     private long mStartDateMillis;
@@ -81,5 +82,13 @@ public class AgendaEvent {
 
     public void setCalendarId(long calendarId) {
         this.mCalendarId = calendarId;
+    }
+
+    public String getCalendarName() {
+        return mCalendarName;
+    }
+
+    public void setCalendarName(String calendarName) {
+        this.mCalendarName = calendarName;
     }
 }

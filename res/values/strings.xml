@@ -12,4 +12,10 @@
 
     <string name="time_prefix">It is</string>
 
+    <plurals name="appointment_count">
+        <item quantity="zero">You have no appointment today.</item>
+        <item quantity="one">You have one appointment today.</item>
+        <item quantity="other">You have %d appointment today.</item>
+    </plurals>
+
 </resources>
