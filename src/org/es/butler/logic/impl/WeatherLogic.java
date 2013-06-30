@@ -26,8 +26,9 @@ public class WeatherLogic implements PronunciationLogic {
     }
 
     private String getPronunciationEn(final WeatherData weather, Context context) {
-        // TODO : Change hard coded sentences with real values !
-       return "The temperature is 24 degrees Celsius. " +
-       "It's a bit rainy today. Don't forget to cover yourself.";
+       // // TODO : Change hard coded sentences with real values !
+       //return "The temperature is 24 degrees Celsius. " +
+       //"It's a bit rainy today. Don't forget to cover yourself.";
+        return "";
     }
 }

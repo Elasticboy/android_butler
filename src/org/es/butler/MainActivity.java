@@ -1,10 +1,13 @@
 package org.es.butler;
 
 import android.app.Activity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.text.format.Time;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -36,6 +39,13 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Resources res = getApplicationContext().getResources();
+        // Change locale settings in the app.
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = Locale.UK;
+        res.updateConfiguration(conf, dm);
 
         mTTS = new TextToSpeech(getApplicationContext(), this);
 
@@ -118,8 +128,8 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         WeatherLogic weather = new WeatherLogic(weatherData);
         sayWeather(weather);
 
-        AgendaLogic agendaLogicToday = new AgendaLogic(todayEvents);
-        AgendaLogic agendaLogicUpcoming = new AgendaLogic(upcomingEvents);
+        AgendaLogic agendaLogicToday = new AgendaLogic(todayEvents, true);
+        AgendaLogic agendaLogicUpcoming = new AgendaLogic(upcomingEvents, false);
         sayTodayEvents(agendaLogicToday);
         sayUpcomingEvents(agendaLogicUpcoming);
     }

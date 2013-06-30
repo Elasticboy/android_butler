@@ -13,13 +13,26 @@ import org.es.butler.logic.PronunciationLogic;
  */
 public class TimeLogic implements PronunciationLogic {
 
+    private boolean mPrefix;
     private Time mTime;
     private Time mMorning;
     private Time mMidday;
     private Time mEvening;
     private Time mNight;
 
+    public TimeLogic(long timeMillis, boolean prefix) {
+        mPrefix = prefix;
+        Time time = new Time();
+        time.set(timeMillis);
+        initTimeLogic(time);
+    }
+
     public TimeLogic(final Time time) {
+        mPrefix = true;
+        initTimeLogic(time);
+    }
+
+    private void initTimeLogic(final Time time) {
         mTime = time;
         mMorning = new Time(time);
         mMidday = new Time(time);
@@ -76,7 +89,10 @@ public class TimeLogic implements PronunciationLogic {
 
         final StringBuilder sb = new StringBuilder();
 
-        sb.append(context.getString(R.string.time_prefix)).append(" ");
+        if (mPrefix) {
+            sb.append(context.getString(R.string.time_prefix)).append(" ");
+        }
+
         sb.append(get12hFormat(time.hour)).append(" ");
 
         if (time.minute > 0 && time.minute < 10) {

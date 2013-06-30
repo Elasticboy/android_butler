@@ -63,24 +63,15 @@ public class GoogleAgendaApi implements AgendaApi {
 
     @Override
     public List<AgendaEvent> checkTodayEvents(Context context) {
-        // TODO look for today's events.
-
-//        final String email = getOwnerAccount(context);
-//        if (email == null) {
-//            return null;
-//        }
 
         Time dayStart = new Time();
         dayStart.setToNow();
         dayStart.set(0, 0, 0, dayStart.monthDay, dayStart.month, dayStart.year);
-        dayStart.toMillis(false);
 
-        Time dayEnd = new Time();
-        dayEnd.setToNow();
-        dayEnd.set(59, 59, 23, dayEnd.monthDay, dayEnd.month, dayEnd.year);
-        dayEnd.toMillis(false);
+        long startMillis    = dayStart.toMillis(false) - 100_000l;
+        long endMillis      = dayStart.toMillis(false) + 86400_000l + 10_000l;
 
-        return readCalendarEvent(context, dayStart.toMillis(false), dayEnd.toMillis(false));
+        return readCalendarEvent(context, startMillis, endMillis);
 
 //        // Run query
 //        Uri uri = Calendars.CONTENT_URI;
@@ -115,13 +106,12 @@ public class GoogleAgendaApi implements AgendaApi {
 
         Time dayStart = new Time();
         dayStart.setToNow();
-        dayStart.set(0, 0, 0, dayStart.monthDay, dayStart.month, dayStart.year);
-        dayStart.toMillis(false);
+        dayStart.set(59, 59, 23, dayStart.monthDay, dayStart.month, dayStart.year);
 
-        Time dayEnd = new Time();
-        dayEnd.set(dayStart.toMillis(false) + 86400000*8);
+        long startMillis    = dayStart.toMillis(false);
+        long endMillis      = dayStart.toMillis(false) + 86400_000l *7l + 10_000l;
 
-        return readCalendarEvent(context, dayStart.toMillis(false), dayEnd.toMillis(false));
+        return readCalendarEvent(context, startMillis, endMillis);
     }
 
 //    private String getOwnerAccount(Context context) {
@@ -142,11 +132,11 @@ public class GoogleAgendaApi implements AgendaApi {
         ContentResolver resolver = context.getContentResolver();
 
         String eventsSelection = "(("
-                + Events.DTSTART + " > ?) AND ("
-                + Events.DTEND + " < ?))";
+                + Events.DTSTART + " >= ?) AND ("
+                + Events.DTEND + " <= ?))";
         String[] eventsSelectionArgs = new String[]{String.valueOf(startDate), String.valueOf(endDate)};
 
-        Cursor cursor = resolver.query(eventsUri, EVENT_PROJECTION, eventsSelection, eventsSelectionArgs, null);
+        Cursor cursor = resolver.query(eventsUri, EVENT_PROJECTION, eventsSelection, eventsSelectionArgs, Events.DTSTART);
 
         List<AgendaEvent> events = new ArrayList<>();
         AgendaEvent event;
