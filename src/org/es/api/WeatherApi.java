@@ -8,4 +8,5 @@ import org.es.butler.pojo.WeatherData;
 public interface WeatherApi {
 
     WeatherData checkWeather();
+    WeatherData doCheckWeather();
 }
