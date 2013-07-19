@@ -2,6 +2,7 @@ package org.es.api;
 
 import android.content.Context;
 
+import org.es.butler.pojo.Agenda;
 import org.es.butler.pojo.AgendaEvent;
 
 import java.util.List;
@@ -11,6 +12,21 @@ import java.util.List;
  */
 public interface AgendaApi {
 
+    /**
+     * @param context The application context.
+     * @return The list of today's events.
+     */
     List<AgendaEvent> checkTodayEvents(Context context);
+
+    /**
+     * @param context The application context.
+     * @return The list of upcoming events.
+     */
     List<AgendaEvent> checkUpcomingEvent(Context context);
+
+    /**
+     * @param context The application context.
+     * @return The list of agendas on the device.
+     */
+    List<Agenda> getAgendas(Context context);
 }
