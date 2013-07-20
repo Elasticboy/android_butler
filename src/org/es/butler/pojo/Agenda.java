@@ -16,4 +16,20 @@ public class Agenda {
         mAccountName    = accountName;
         mOwnerName      = ownerName;
     }
+
+    public long getId() {
+        return mId;
+    }
+
+    public String getDisplayName() {
+        return mDisplayName;
+    }
+
+    public String getAccountName() {
+        return mAccountName;
+    }
+
+    public String getOwnerName() {
+        return mOwnerName;
+    }
 }
