@@ -1,14 +1,20 @@
 package org.es.butler;
 
-import android.app.Activity;
 import android.app.ListActivity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import org.es.api.AgendaApi;
 import org.es.api.factory.AgendaApiFactory;
-import org.es.butler.pojo.Agenda;
+import org.es.api.pojo.Agenda;
 
 import java.util.List;
 
@@ -44,6 +50,38 @@ public class AgendaList extends ListActivity {
                 android.R.layout.simple_list_item_1,
                 names);
 
-        getListView().setAdapter(adapter);
+        ListView list = getListView();
+        list.setAdapter(adapter);
+        list.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        switch (event.getKeyCode()) {
+            case KeyEvent.KEYCODE_BACK:
+                SparseBooleanArray map = getListView().getCheckedItemPositions();
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < map.size(); i++) {
+                    if (map.get(i)) {
+                        sb.append(i + " ");
+                    }
+                }
+                Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_LONG).show();
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        if (l.getCheckedItemPositions().get((int)id)) {
+            v.setBackgroundColor(Color.BLUE);
+        } else {
+            v.setBackgroundColor(Color.LTGRAY);
+        }
+        super.onListItemClick(l, v, position, id);
+
+
     }
 }

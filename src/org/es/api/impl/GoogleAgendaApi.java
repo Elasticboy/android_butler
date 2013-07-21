@@ -9,8 +9,8 @@ import android.provider.CalendarContract.Events;
 import android.text.format.Time;
 
 import org.es.api.AgendaApi;
-import org.es.butler.pojo.Agenda;
-import org.es.butler.pojo.AgendaEvent;
+import org.es.api.pojo.Agenda;
+import org.es.api.pojo.AgendaEvent;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,8 +2,8 @@ package org.es.api;
 
 import android.content.Context;
 
-import org.es.butler.pojo.Agenda;
-import org.es.butler.pojo.AgendaEvent;
+import org.es.api.pojo.Agenda;
+import org.es.api.pojo.AgendaEvent;
 
 import java.util.List;
 

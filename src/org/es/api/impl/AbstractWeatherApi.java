@@ -3,7 +3,7 @@ package org.es.api.impl;
 import android.text.format.Time;
 
 import org.es.api.WeatherApi;
-import org.es.butler.pojo.WeatherData;
+import org.es.api.pojo.WeatherData;
 
 /**
  * Created by Cyril on 02/07/13.

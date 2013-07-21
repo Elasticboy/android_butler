@@ -1,11 +1,9 @@
 package org.es.butler.logic.impl;
 
 import android.content.Context;
-import android.speech.tts.TextToSpeech;
-import android.text.format.Time;
 
 import org.es.butler.logic.PronunciationLogic;
-import org.es.butler.pojo.WeatherData;
+import org.es.api.pojo.WeatherData;
 
 /**
  * Created by Cyril Leroux on 20/06/13.

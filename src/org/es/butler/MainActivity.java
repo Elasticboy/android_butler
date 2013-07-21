@@ -23,8 +23,8 @@ import org.es.api.factory.WeatherApiFactory;
 import org.es.butler.logic.impl.AgendaLogic;
 import org.es.butler.logic.impl.TimeLogic;
 import org.es.butler.logic.impl.WeatherLogic;
-import org.es.butler.pojo.AgendaEvent;
-import org.es.butler.pojo.WeatherData;
+import org.es.api.pojo.AgendaEvent;
+import org.es.api.pojo.WeatherData;
 
 import java.util.List;
 import java.util.Locale;

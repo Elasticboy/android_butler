@@ -1,4 +1,4 @@
-package org.es.butler.pojo;
+package org.es.api.pojo;
 
 /**
  * Created by Cyril Leroux on 19/07/13.
