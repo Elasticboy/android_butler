@@ -4,6 +4,7 @@
     <string name="app_name">Butler</string>
     <string name="daily_speech">Daily Speech</string>
     <string name="action_settings">Settings</string>
+    <string name="action_agendas">Agendas</string>
 
     <string name="good_morning">Good morning, sir.</string>
     <string name="good_afternoon">Good afternoon, sir.</string>
@@ -11,5 +12,7 @@
     <string name="good_night">Good night, sir.</string>
 
     <string name="time_prefix">It is</string>
+
+    <string name="no_agenda">No agenda found on the device.</string>
 
 </resources>

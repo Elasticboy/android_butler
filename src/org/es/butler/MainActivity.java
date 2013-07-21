@@ -1,6 +1,7 @@
 package org.es.butler;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -67,6 +69,19 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_agendas:
+                startActivity(new Intent(getApplicationContext(), AgendaList.class));
+                break;
+
+            default:
+        }
+        return super.onMenuItemSelected(featureId, item);
     }
 
     @Override
