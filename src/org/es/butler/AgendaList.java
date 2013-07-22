@@ -15,6 +15,7 @@ import android.widget.Toast;
 import org.es.api.AgendaApi;
 import org.es.api.factory.AgendaApiFactory;
 import org.es.api.pojo.Agenda;
+import org.es.butler.component.AgendaAdapter;
 
 import java.util.List;
 
@@ -45,14 +46,9 @@ public class AgendaList extends ListActivity {
             Log.d(TAG, agenda.getId() + " | " + agenda.getAccountName() + " | " + agenda.getDisplayName() + " | " + agenda.getOwnerName());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getApplicationContext(),
-                android.R.layout.simple_list_item_1,
-                names);
-
-        ListView list = getListView();
-        list.setAdapter(adapter);
-        list.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        AgendaAdapter adapter = new AgendaAdapter(getApplicationContext(), agendas);
+        setListAdapter(adapter);
+        getListView().setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
     }
 
     @Override

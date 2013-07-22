@@ -1,6 +1,7 @@
 package org.es.butler.component;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,36 +55,39 @@ public class AgendaAdapter extends BaseAdapter {
         TextView displayName;
         TextView accountName;
         TextView ownerName;
-        CheckBox selected;
+        CheckBox checkBox;
     }
 
     @Override
     public View getView(int pos, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.agenda_item, null);
             holder = new ViewHolder();
             // Draw a color rect
             // holder.color        = (ImageView) _convertView.findViewById(R.id.ivThumbnail);
-            holder.displayName		= (TextView) convertView.findViewById(R.id.agenda_title);
+            holder.displayName = (TextView) convertView.findViewById(R.id.agenda_title);
             //holder.accountName      = (TextView) convertView.findViewById(R.id.tvSubject);
             //holder.ownerName        = (TextView) convertView.findViewById(R.id.tvMessage);
-            holder.selected        = (CheckBox) convertView.findViewById(R.id.agenda_checkbox);
+            holder.checkBox = (CheckBox) convertView.findViewById(R.id.agenda_checkbox);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.checkBox.toggle();
+            }
+        });
 
         final Agenda agenda = mAgendas.get(pos);
-        //final Bitmap bmp = card.getThumbBitmap();
-        //if (bmp != null && !bmp.isRecycled())
-        //    holder.ivThumbnail.setImageBitmap(bmp);
-        //else
-        //    holder.ivThumbnail.setVisibility(View.GONE);
-
         holder.displayName.setText(agenda.getDisplayName());
-        //holder.tvSubject.setText(card.getSubject());
-        //holder.tvMessage.setText(card.getMessage());
+        if (holder.checkBox.isChecked()) {
+            //holder.displayName.setTextColor();
+        } else {
+            //holder.displayName.setTextColor(android.R.color.primary_text_light_nodisable);
+        }
         return convertView;
     }
 }
