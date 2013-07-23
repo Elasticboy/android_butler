@@ -59,7 +59,7 @@ public class GoogleAgendaApi implements AgendaApi {
 
 
     @Override
-    public List<AgendaEvent> checkTodayEvents(Context context) {
+    public List<AgendaEvent> checkTodayEvents(Context context, List<String> restrictionList) {
 
         Time dayStart = new Time();
         dayStart.setToNow();
@@ -68,7 +68,7 @@ public class GoogleAgendaApi implements AgendaApi {
         long startMillis = dayStart.toMillis(false) - 100_000l;
         long endMillis = dayStart.toMillis(false) + 86400_000l + 10_000l;
 
-        return readCalendarEvent(context, startMillis, endMillis);
+        return readCalendarEvent(context, startMillis, endMillis, restrictionList);
 
 //        // Run query
 //        Uri uri = Calendars.CONTENT_URI;
@@ -99,7 +99,7 @@ public class GoogleAgendaApi implements AgendaApi {
     }
 
     @Override
-    public List<AgendaEvent> checkUpcomingEvent(Context context) {
+    public List<AgendaEvent> checkUpcomingEvent(Context context, List<String> restrictionList) {
 
         Time dayStart = new Time();
         dayStart.setToNow();
@@ -108,7 +108,7 @@ public class GoogleAgendaApi implements AgendaApi {
         long startMillis = dayStart.toMillis(false);
         long endMillis = dayStart.toMillis(false) + 86400_000l * 7l + 10_000l;
 
-        return readCalendarEvent(context, startMillis, endMillis);
+        return readCalendarEvent(context, startMillis, endMillis, restrictionList);
     }
 
 //    private String getOwnerAccount(Context context) {
@@ -123,17 +123,35 @@ public class GoogleAgendaApi implements AgendaApi {
 //        return null;
 //    }
 
-    private List<AgendaEvent> readCalendarEvent(Context context, long startDate, long endDate) {
+    private List<AgendaEvent> readCalendarEvent(Context context, long startDate, long endDate, List<String> restrictionList) {
 
         Uri eventsUri = Events.CONTENT_URI;
         ContentResolver resolver = context.getContentResolver();
 
-        String eventsSelection = "(("
-                + Events.DTSTART + " >= ?) AND ("
-                + Events.DTEND + " <= ?))";
-        String[] eventsSelectionArgs = new String[]{String.valueOf(startDate), String.valueOf(endDate)};
+        StringBuilder eventsSelection = new StringBuilder();
+        eventsSelection.append("(");
+        eventsSelection.append("(" + Events.DTSTART + " >= ?)");
+        eventsSelection.append(" AND ");
+        eventsSelection.append("(" + Events.DTEND + " <= ?)");
+        if (restrictionList != null && !restrictionList.isEmpty()) {
+            eventsSelection.append(" AND ");
+            eventsSelection.append("(" + Events.CALENDAR_DISPLAY_NAME + " IN (?))");
+        }
+        eventsSelection.append(")");
 
-        Cursor cursor = resolver.query(eventsUri, EVENT_PROJECTION, eventsSelection, eventsSelectionArgs, Events.DTSTART);
+        StringBuilder restrictionCondition = new StringBuilder();
+        for (String restriction : restrictionList) {
+            restrictionCondition.append(restriction).append(",");
+        }
+
+        String[] eventsSelectionArgs;
+        if (restrictionList != null && !restrictionList.isEmpty()) {
+            eventsSelectionArgs = new String[]{String.valueOf(startDate), String.valueOf(endDate), restrictionCondition.toString()};
+        } else {
+            eventsSelectionArgs = new String[]{String.valueOf(startDate), String.valueOf(endDate)};
+        }
+
+        Cursor cursor = resolver.query(eventsUri, EVENT_PROJECTION, eventsSelection.toString(), eventsSelectionArgs, Events.DTSTART);
 
         List<AgendaEvent> events = new ArrayList<>();
         AgendaEvent event;

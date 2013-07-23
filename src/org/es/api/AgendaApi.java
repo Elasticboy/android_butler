@@ -14,15 +14,17 @@ public interface AgendaApi {
 
     /**
      * @param context The application context.
+     * @param restrictionList
      * @return The list of today's events.
      */
-    List<AgendaEvent> checkTodayEvents(Context context);
+    List<AgendaEvent> checkTodayEvents(Context context, List<String> restrictionList);
 
     /**
      * @param context The application context.
+     * @param restrictionList
      * @return The list of upcoming events.
      */
-    List<AgendaEvent> checkUpcomingEvent(Context context);
+    List<AgendaEvent> checkUpcomingEvent(Context context, List<String> restrictionList);
 
     /**
      * @param context The application context.

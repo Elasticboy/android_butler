@@ -18,6 +18,7 @@ import android.widget.Button;
 
 import org.es.api.AgendaApi;
 import org.es.api.WeatherApi;
+import org.es.api.dao.AgendaDao;
 import org.es.api.factory.AgendaApiFactory;
 import org.es.api.factory.WeatherApiFactory;
 import org.es.butler.logic.impl.AgendaLogic;
@@ -26,8 +27,10 @@ import org.es.butler.logic.impl.WeatherLogic;
 import org.es.api.pojo.AgendaEvent;
 import org.es.api.pojo.WeatherData;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Created by Cyril Leroux on 17/06/13.
@@ -129,9 +132,12 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         WeatherApi weatherApi = WeatherApiFactory.getWeatherAPI();
         WeatherData weatherData = weatherApi.checkWeather();
 
+
         AgendaApi agendaApi = AgendaApiFactory.getAgendaApi();
-        List<AgendaEvent> todayEvents = agendaApi.checkTodayEvents(getApplicationContext());
-        List<AgendaEvent> upcomingEvents = agendaApi.checkUpcomingEvent(getApplicationContext());
+
+        List<String> agendaIds = AgendaDao.loadFromPref(getApplicationContext());
+        List<AgendaEvent> todayEvents = agendaApi.checkTodayEvents(getApplicationContext(), agendaIds);
+        List<AgendaEvent> upcomingEvents = agendaApi.checkUpcomingEvent(getApplicationContext(), agendaIds);
 
         Time now = new Time();
         now.setToNow();
@@ -148,6 +154,8 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         sayTodayEvents(agendaLogicToday);
         sayUpcomingEvents(agendaLogicUpcoming);
     }
+
+
 
     private boolean cancelDailySpeech() {
         // TODO implement the conditions to cancel daily speech
