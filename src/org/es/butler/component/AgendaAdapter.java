@@ -3,6 +3,8 @@ package org.es.butler.component;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.util.SparseArray;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +24,7 @@ import java.util.List;
 public class AgendaAdapter extends BaseAdapter {
 
     private List<Agenda> mAgendas = null;
-    private List<Agenda> mSelectedAgendas = new ArrayList<>();
+    private SparseBooleanArray mSelectedAgendas = new SparseBooleanArray();
     private LayoutInflater mInflater;
 
     public AgendaAdapter(Context context, List<Agenda> agendas) {
@@ -61,7 +63,7 @@ public class AgendaAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int pos, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.agenda_item, null);
@@ -77,17 +79,13 @@ public class AgendaAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final Agenda agenda = mAgendas.get(pos);
+        final Agenda agenda = mAgendas.get(position);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 holder.checkBox.toggle();
-                if (holder.checkBox.isChecked()){
-                    mSelectedAgendas.add(agenda);
-                } else {
-                    mSelectedAgendas.remove(agenda);
-                }
+                mSelectedAgendas.put(position, holder.checkBox.isChecked());
             }
         });
 
@@ -100,7 +98,7 @@ public class AgendaAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public List<Agenda> getSelectedAgendas() {
+    public SparseBooleanArray getSelectedAgendas() {
         return mSelectedAgendas;
     }
 }

@@ -57,12 +57,11 @@ public class AgendaList extends ListActivity {
 
         switch (event.getKeyCode()) {
             case KeyEvent.KEYCODE_BACK:
-                SparseBooleanArray map = getListView().getCheckedItemPositions();
-                StringBuilder sb = new StringBuilder();
 
-                List<Agenda> selectedAgendas = mAdapter.getSelectedAgendas();
-                for (int i = 0; i < map.size(); i++) {
-                    if (map.get(i)) {
+                SparseBooleanArray selectedAgendas = mAdapter.getSelectedAgendas();
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < selectedAgendas.size(); i++) {
+                    if (selectedAgendas.get(i)) {
                         sb.append(i + " ");
                     }
                 }
