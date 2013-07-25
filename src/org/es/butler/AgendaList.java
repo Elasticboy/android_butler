@@ -25,6 +25,7 @@ import java.util.List;
 public class AgendaList extends ListActivity {
 
     private static final String TAG = "AgendaList";
+    private AgendaAdapter mAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +47,8 @@ public class AgendaList extends ListActivity {
             Log.d(TAG, agenda.getId() + " | " + agenda.getAccountName() + " | " + agenda.getDisplayName() + " | " + agenda.getOwnerName());
         }
 
-        AgendaAdapter adapter = new AgendaAdapter(getApplicationContext(), agendas);
-        setListAdapter(adapter);
+        mAdapter = new AgendaAdapter(getApplicationContext(), agendas);
+        setListAdapter(mAdapter);
         getListView().setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
     }
 
@@ -58,6 +59,8 @@ public class AgendaList extends ListActivity {
             case KeyEvent.KEYCODE_BACK:
                 SparseBooleanArray map = getListView().getCheckedItemPositions();
                 StringBuilder sb = new StringBuilder();
+
+                List<Agenda> selectedAgendas = mAdapter.getSelectedAgendas();
                 for (int i = 0; i < map.size(); i++) {
                     if (map.get(i)) {
                         sb.append(i + " ");

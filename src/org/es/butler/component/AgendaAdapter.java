@@ -13,6 +13,7 @@ import android.widget.TextView;
 import org.es.api.pojo.Agenda;
 import org.es.butler.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +22,7 @@ import java.util.List;
 public class AgendaAdapter extends BaseAdapter {
 
     private List<Agenda> mAgendas = null;
+    private List<Agenda> mSelectedAgendas = new ArrayList<>();
     private LayoutInflater mInflater;
 
     public AgendaAdapter(Context context, List<Agenda> agendas) {
@@ -74,14 +76,21 @@ public class AgendaAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        final Agenda agenda = mAgendas.get(pos);
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 holder.checkBox.toggle();
+                if (holder.checkBox.isChecked()){
+                    mSelectedAgendas.add(agenda);
+                } else {
+                    mSelectedAgendas.remove(agenda);
+                }
             }
         });
 
-        final Agenda agenda = mAgendas.get(pos);
         holder.displayName.setText(agenda.getDisplayName());
         if (holder.checkBox.isChecked()) {
             //holder.displayName.setTextColor();
@@ -89,5 +98,9 @@ public class AgendaAdapter extends BaseAdapter {
             //holder.displayName.setTextColor(android.R.color.primary_text_light_nodisable);
         }
         return convertView;
+    }
+
+    public List<Agenda> getSelectedAgendas() {
+        return mSelectedAgendas;
     }
 }
