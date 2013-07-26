@@ -85,6 +85,7 @@ public class AgendaAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 holder.checkBox.toggle();
+                mSelectedAgendas.delete(position);
                 mSelectedAgendas.put(position, holder.checkBox.isChecked());
             }
         });
