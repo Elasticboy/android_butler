@@ -92,9 +92,9 @@ public class AgendaAdapter extends BaseAdapter {
 
         holder.displayName.setText(agenda.getDisplayName());
         if (holder.checkBox.isChecked()) {
-            //holder.displayName.setTextColor();
+            holder.displayName.setTextColor(Color.BLUE);
         } else {
-            //holder.displayName.setTextColor(android.R.color.primary_text_light_nodisable);
+            holder.displayName.setTextColor(Color.GRAY);
         }
         return convertView;
     }
