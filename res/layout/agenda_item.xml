@@ -26,6 +26,8 @@
 
     <CheckBox
             android:id="@+id/agenda_checkbox"
+            android:focusable="false"
+            android:clickable="false"
             android:shadowColor="@android:color/black"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"

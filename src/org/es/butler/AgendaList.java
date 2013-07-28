@@ -1,22 +1,22 @@
 package org.es.butler;
 
 import android.app.ListActivity;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import org.es.api.AgendaApi;
+import org.es.api.dao.AgendaDao;
 import org.es.api.factory.AgendaApiFactory;
 import org.es.api.pojo.Agenda;
 import org.es.butler.component.AgendaAdapter;
+import org.es.butler.utils.IntentKey;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,9 +47,11 @@ public class AgendaList extends ListActivity {
             Log.d(TAG, agenda.getId() + " | " + agenda.getAccountName() + " | " + agenda.getDisplayName() + " | " + agenda.getOwnerName());
         }
 
-        mAdapter = new AgendaAdapter(getApplicationContext(), agendas);
+        List<String> selectedNames = AgendaDao.loadFromPref(getApplicationContext());
+        mAdapter = new AgendaAdapter(getApplicationContext(), agendas, selectedNames);
         setListAdapter(mAdapter);
-        getListView().setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
     }
 
     @Override
@@ -58,28 +60,77 @@ public class AgendaList extends ListActivity {
         switch (event.getKeyCode()) {
             case KeyEvent.KEYCODE_BACK:
 
-                SparseBooleanArray selectedAgendas = mAdapter.getSelectedAgendas();
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < selectedAgendas.size(); i++) {
-                    if (selectedAgendas.get(i)) {
-                        sb.append(i + " ");
-                    }
-                }
-                Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_LONG).show();
+                returnSelectedAgendas();
                 break;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        if (l.getCheckedItemPositions().get((int)id)) {
-            v.setBackgroundColor(Color.BLUE);
-        } else {
-            v.setBackgroundColor(Color.LTGRAY);
+    protected void returnSelectedAgendas() {
+        checkList();
+
+        ArrayList<String> returnedList = new ArrayList<>();
+
+        // For each element in the status array
+        final SparseBooleanArray selectedAgendas = mAdapter.getSelectedAgendas();
+        final int agendaCount = selectedAgendas.size();
+        for (int i = 0; i < agendaCount; ++i) {
+            // This tells us the item position we are looking at
+            final int itemPosition = selectedAgendas.keyAt(i);
+
+            // And this tells us the item status at the above position
+            final boolean isChecked = selectedAgendas.valueAt(i);
+
+            // And we can get our data from the adapter like that
+            final Agenda agenda = (Agenda) mAdapter.getItem(itemPosition);
+
+            if (isChecked) {
+                returnedList.add(agenda.getDisplayName());
+            }
         }
-        super.onListItemClick(l, v, position, id);
 
+        Intent returnIntent = new Intent();
+        returnIntent.putStringArrayListExtra(IntentKey.AGENDA_LIST_INTENT, returnedList);
+        setResult(RESULT_OK, returnIntent);
+        finish();
+    }
 
+    protected void checkList() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("native implementation : ");
+        final SparseBooleanArray checkedItems = getListView().getCheckedItemPositions();
+        // For each element in the status array
+        final int checkedItemsCount = checkedItems.size();
+        for (int i = 0; i < checkedItemsCount; ++i) {
+            // This tells us the item position we are looking at
+            final int itemPosition = checkedItems.keyAt(i);
+
+            // And this tells us the item status at the above position
+            final boolean isChecked = checkedItems.valueAt(i);
+
+            // And we can get our data from the adapter like that
+            final Agenda currentItem = (Agenda) mAdapter.getItem(itemPosition);
+            sb.append(itemPosition).append(":").append(isChecked).append(" ");
+        }
+        sb.append("\n");
+
+        sb.append("owned implementation : ");
+        // For each element in the status array
+        final SparseBooleanArray selectedAgendas = mAdapter.getSelectedAgendas();
+        final int agendaCount = selectedAgendas.size();
+        for (int i = 0; i < agendaCount; ++i) {
+            // This tells us the item position we are looking at
+            final int itemPosition = selectedAgendas.keyAt(i);
+
+            // And this tells us the item status at the above position
+            final boolean isChecked = selectedAgendas.valueAt(i);
+
+            // And we can get our data from the adapter like that
+            final Agenda currentItem = (Agenda) mAdapter.getItem(itemPosition);
+            sb.append(itemPosition).append(":").append(isChecked).append(" ");
+        }
+
+        Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_LONG).show();
     }
 }

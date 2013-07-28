@@ -24,12 +24,26 @@ import java.util.List;
 public class AgendaAdapter extends BaseAdapter {
 
     private List<Agenda> mAgendas = null;
-    private SparseBooleanArray mSelectedAgendas = new SparseBooleanArray();
+    private SparseBooleanArray mSelectedAgendas = null;
     private LayoutInflater mInflater;
 
-    public AgendaAdapter(Context context, List<Agenda> agendas) {
+
+    private int mSelectedTextColor = 0;
+    private int mDefaultTextColor = 0;
+
+    public AgendaAdapter(Context context, List<Agenda> agendas, List<String> selectedNames) {
         mInflater = LayoutInflater.from(context);
         mAgendas = agendas;
+        mSelectedAgendas = new SparseBooleanArray(agendas.size());
+
+        final int agendaCount = agendas.size();
+        for (int i = 0; i < agendaCount; i++) {
+            boolean alreadySelected = selectedNames.contains(agendas.get(i).getDisplayName());
+            mSelectedAgendas.put(i, alreadySelected);
+        }
+
+        mSelectedTextColor = context.getResources().getColor(android.R.color.primary_text_light);
+        mDefaultTextColor = context.getResources().getColor(android.R.color.primary_text_light_nodisable);
     }
 
     @Override
@@ -65,6 +79,7 @@ public class AgendaAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
+
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.agenda_item, null);
             holder = new ViewHolder();
@@ -80,22 +95,22 @@ public class AgendaAdapter extends BaseAdapter {
         }
 
         final Agenda agenda = mAgendas.get(position);
+        // Is Selected
+        holder.checkBox.setChecked(mSelectedAgendas.valueAt(position));
+        // text
+        holder.displayName.setText(agenda.getDisplayName());
+        // Color
+        int color = (holder.checkBox.isChecked()) ? mSelectedTextColor : mDefaultTextColor;
+        holder.displayName.setTextColor(color);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 holder.checkBox.toggle();
-                mSelectedAgendas.delete(position);
                 mSelectedAgendas.put(position, holder.checkBox.isChecked());
             }
         });
 
-        holder.displayName.setText(agenda.getDisplayName());
-        if (holder.checkBox.isChecked()) {
-            holder.displayName.setTextColor(Color.BLUE);
-        } else {
-            holder.displayName.setTextColor(Color.GRAY);
-        }
         return convertView;
     }
 

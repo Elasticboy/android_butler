@@ -26,6 +26,7 @@ import org.es.butler.logic.impl.TimeLogic;
 import org.es.butler.logic.impl.WeatherLogic;
 import org.es.api.pojo.AgendaEvent;
 import org.es.api.pojo.WeatherData;
+import org.es.butler.utils.IntentKey;
 
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +37,8 @@ import java.util.Set;
  * Created by Cyril Leroux on 17/06/13.
  */
 public class MainActivity extends Activity implements OnInitListener, OnClickListener {
+
+    public static final int RC_AGENDA_LIST = 0;
 
     private static final String TAG = "ButlerActivity";
     private TextToSpeech mTTS;
@@ -79,12 +82,27 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
 
         switch (item.getItemId()) {
             case R.id.action_agendas:
-                startActivity(new Intent(getApplicationContext(), AgendaList.class));
+                Intent agendaListIntent = new Intent(getApplicationContext(), AgendaList.class);
+                startActivityForResult(agendaListIntent, RC_AGENDA_LIST);
                 break;
 
             default:
         }
         return super.onMenuItemSelected(featureId, item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case RC_AGENDA_LIST:
+                if (requestCode == RESULT_OK) {
+                    List<String> agendaNames = data.getStringArrayListExtra(IntentKey.AGENDA_LIST_INTENT);
+                    AgendaDao.saveToPref(getApplicationContext(), agendaNames);
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -135,9 +153,9 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
 
         AgendaApi agendaApi = AgendaApiFactory.getAgendaApi();
 
-        List<String> agendaIds = AgendaDao.loadFromPref(getApplicationContext());
-        List<AgendaEvent> todayEvents = agendaApi.checkTodayEvents(getApplicationContext(), agendaIds);
-        List<AgendaEvent> upcomingEvents = agendaApi.checkUpcomingEvent(getApplicationContext(), agendaIds);
+        List<String> agendaNames = AgendaDao.loadFromPref(getApplicationContext());
+        List<AgendaEvent> todayEvents = agendaApi.checkTodayEvents(getApplicationContext(), agendaNames);
+        List<AgendaEvent> upcomingEvents = agendaApi.checkUpcomingEvent(getApplicationContext(), agendaNames);
 
         Time now = new Time();
         now.setToNow();
