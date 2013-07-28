@@ -21,17 +21,15 @@ import org.es.api.WeatherApi;
 import org.es.api.dao.AgendaDao;
 import org.es.api.factory.AgendaApiFactory;
 import org.es.api.factory.WeatherApiFactory;
+import org.es.api.pojo.AgendaEvent;
+import org.es.api.pojo.WeatherData;
 import org.es.butler.logic.impl.AgendaLogic;
 import org.es.butler.logic.impl.TimeLogic;
 import org.es.butler.logic.impl.WeatherLogic;
-import org.es.api.pojo.AgendaEvent;
-import org.es.api.pojo.WeatherData;
 import org.es.butler.utils.IntentKey;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 /**
  * Created by Cyril Leroux on 17/06/13.

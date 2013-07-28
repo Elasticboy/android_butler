@@ -3,9 +3,9 @@ package org.es.butler.logic.impl;
 import android.content.Context;
 import android.text.format.DateFormat;
 
+import org.es.api.pojo.AgendaEvent;
 import org.es.butler.R;
 import org.es.butler.logic.PronunciationLogic;
-import org.es.api.pojo.AgendaEvent;
 
 import java.util.List;
 

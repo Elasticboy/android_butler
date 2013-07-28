@@ -2,8 +2,8 @@ package org.es.butler.logic.impl;
 
 import android.content.Context;
 
-import org.es.butler.logic.PronunciationLogic;
 import org.es.api.pojo.WeatherData;
+import org.es.butler.logic.PronunciationLogic;
 
 /**
  * Created by Cyril Leroux on 20/06/13.

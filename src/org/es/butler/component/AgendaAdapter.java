@@ -1,9 +1,7 @@
 package org.es.butler.component;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 import org.es.api.pojo.Agenda;
 import org.es.butler.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
