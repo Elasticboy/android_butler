@@ -49,8 +49,8 @@ public class AgendaList extends ListActivity {
         }
 
         String[] selectedNames = getIntent().getStringArrayExtra(IntentKey.AGENDA_LIST_INTENT);
-        //List<String> selectedNames = AgendaDao.loadFromPref(getApplicationContext());
-        mAdapter = new AgendaAdapter(getApplicationContext(), agendas, Arrays.asList(selectedNames));
+        List<String> selected = (selectedNames != null) ? Arrays.asList(selectedNames) : new ArrayList<String>();
+        mAdapter = new AgendaAdapter(getApplicationContext(), agendas, selected);
         setListAdapter(mAdapter);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
