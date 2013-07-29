@@ -28,6 +28,7 @@ import org.es.butler.logic.impl.TimeLogic;
 import org.es.butler.logic.impl.WeatherLogic;
 import org.es.butler.utils.IntentKey;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -81,6 +82,11 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         switch (item.getItemId()) {
             case R.id.action_agendas:
                 Intent agendaListIntent = new Intent(getApplicationContext(), AgendaList.class);
+
+                String[] agendaNames = AgendaDao.loadFromPref(getApplicationContext());
+                if (agendaNames.length > 0) {
+                    agendaListIntent.putExtra(IntentKey.AGENDA_LIST_INTENT, agendaNames);
+                }
                 startActivityForResult(agendaListIntent, RC_AGENDA_LIST);
                 break;
 
@@ -93,7 +99,7 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case RC_AGENDA_LIST:
-                if (requestCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     List<String> agendaNames = data.getStringArrayListExtra(IntentKey.AGENDA_LIST_INTENT);
                     AgendaDao.saveToPref(getApplicationContext(), agendaNames);
                 }
@@ -151,7 +157,7 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
 
         AgendaApi agendaApi = AgendaApiFactory.getAgendaApi();
 
-        List<String> agendaNames = AgendaDao.loadFromPref(getApplicationContext());
+        List<String> agendaNames = AgendaDao.loadAsList(getApplicationContext());
         List<AgendaEvent> todayEvents = agendaApi.checkTodayEvents(getApplicationContext(), agendaNames);
         List<AgendaEvent> upcomingEvents = agendaApi.checkUpcomingEvent(getApplicationContext(), agendaNames);
 

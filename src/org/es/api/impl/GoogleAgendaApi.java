@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
+import android.text.SpannableStringBuilder;
 import android.text.format.Time;
 
 import org.es.api.AgendaApi;
@@ -146,7 +147,12 @@ public class GoogleAgendaApi implements AgendaApi {
 
         String[] eventsSelectionArgs;
         if (restrictionList != null && !restrictionList.isEmpty()) {
-            eventsSelectionArgs = new String[]{String.valueOf(startDate), String.valueOf(endDate), restrictionCondition.toString()};
+            StringBuilder sb = new StringBuilder();
+            for (String restriction : restrictionList) {
+                sb.append(restriction).append(",");
+            }
+            sb.deleteCharAt(sb.length()-1);
+            eventsSelectionArgs = new String[]{String.valueOf(startDate), String.valueOf(endDate), sb.toString()};
         } else {
             eventsSelectionArgs = new String[]{String.valueOf(startDate), String.valueOf(endDate)};
         }

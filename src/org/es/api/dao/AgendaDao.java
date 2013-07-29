@@ -3,7 +3,9 @@ package org.es.api.dao;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,19 +22,32 @@ public class AgendaDao {
         SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        for (int i = 0; i < agendaIds.size(); i++) {
-            editor.putString(PREF_AGENDAS, agendaIds.get(i) + SEPARATOR);
+        StringBuilder sb = new StringBuilder();
+        final int size = agendaIds.size();
+        for (int id = 0; id < size; id++) {
+            sb.append(agendaIds.get(id));
+            if (id < size - 1) {
+                sb.append(SEPARATOR);
+            }
         }
 
+        editor.putString(PREF_AGENDAS, sb.toString());
         editor.commit();
     }
 
-    public static List<String> loadFromPref(Context context) {
+    public static String[] loadFromPref(Context context) {
 
         SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-
         String prefAsString = preferences.getString(PREF_AGENDAS, "");
 
-        return Arrays.asList(prefAsString.split(SEPARATOR));
+        List<String> list = new ArrayList<>();
+        if (prefAsString.isEmpty()) {
+            return new String[]{};
+        }
+        return prefAsString.split(SEPARATOR);
+    }
+
+    public static List<String> loadAsList(Context context) {
+        return Arrays.asList(loadFromPref(context));
     }
 }

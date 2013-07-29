@@ -17,6 +17,7 @@ import org.es.butler.component.AgendaAdapter;
 import org.es.butler.utils.IntentKey;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,8 +48,9 @@ public class AgendaList extends ListActivity {
             Log.d(TAG, agenda.getId() + " | " + agenda.getAccountName() + " | " + agenda.getDisplayName() + " | " + agenda.getOwnerName());
         }
 
-        List<String> selectedNames = AgendaDao.loadFromPref(getApplicationContext());
-        mAdapter = new AgendaAdapter(getApplicationContext(), agendas, selectedNames);
+        String[] selectedNames = getIntent().getStringArrayExtra(IntentKey.AGENDA_LIST_INTENT);
+        //List<String> selectedNames = AgendaDao.loadFromPref(getApplicationContext());
+        mAdapter = new AgendaAdapter(getApplicationContext(), agendas, Arrays.asList(selectedNames));
         setListAdapter(mAdapter);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
