@@ -136,7 +136,14 @@ public class GoogleAgendaApi implements AgendaApi {
         eventsSelection.append("(" + Events.DTEND + " <= ?)");
         if (restrictionList != null && !restrictionList.isEmpty()) {
             eventsSelection.append(" AND ");
-            eventsSelection.append("(" + Events.CALENDAR_DISPLAY_NAME + " IN (?))");
+            eventsSelection.append("(");
+            for (int i = 0; i < restrictionList.size(); i++) {
+                eventsSelection.append(Events.CALENDAR_DISPLAY_NAME + " = ?");
+                if (i < restrictionList.size() - 1) {
+                    eventsSelection.append(" OR ");
+                }
+            }
+            eventsSelection.append(")");
         }
         eventsSelection.append(")");
 
@@ -147,12 +154,13 @@ public class GoogleAgendaApi implements AgendaApi {
 
         String[] eventsSelectionArgs;
         if (restrictionList != null && !restrictionList.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
+            eventsSelectionArgs = new String[2 + restrictionList.size()];
+            int i = -1;
+            eventsSelectionArgs[++i] = String.valueOf(startDate);
+            eventsSelectionArgs[++i] = String.valueOf(endDate);
             for (String restriction : restrictionList) {
-                sb.append(restriction).append(",");
+                eventsSelectionArgs[++i] = "'" + restriction + "'";
             }
-            sb.deleteCharAt(sb.length()-1);
-            eventsSelectionArgs = new String[]{String.valueOf(startDate), String.valueOf(endDate), sb.toString()};
         } else {
             eventsSelectionArgs = new String[]{String.valueOf(startDate), String.valueOf(endDate)};
         }
