@@ -154,7 +154,6 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         WeatherApi weatherApi = WeatherApiFactory.getWeatherAPI();
         WeatherData weatherData = weatherApi.checkWeather();
 
-
         AgendaApi agendaApi = AgendaApiFactory.getAgendaApi();
 
         List<String> agendaNames = AgendaDao.loadAsList(getApplicationContext());
@@ -176,8 +175,6 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         sayTodayEvents(agendaLogicToday);
         sayUpcomingEvents(agendaLogicUpcoming);
     }
-
-
 
     private boolean cancelDailySpeech() {
         // TODO implement the conditions to cancel daily speech
@@ -255,6 +252,5 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
             Log.e(TAG, "sayUpcomingEvents(), couldn't get pronunciation.");
         }
         mTTS.speak(text, TextToSpeech.QUEUE_ADD, null);
-
     }
 }
