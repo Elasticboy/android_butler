@@ -176,7 +176,7 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
     }
 
     private boolean cancelDailySpeech() {
-        // TODO implement the conditions to cancel daily speech
+        // TODO implement the conditions to cancel daily speech (e.g. already get the speech today)
         return false;
     }
 
