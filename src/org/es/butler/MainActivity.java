@@ -28,7 +28,6 @@ import org.es.butler.logic.impl.TimeLogic;
 import org.es.butler.logic.impl.WeatherLogic;
 import org.es.butler.utils.IntentKey;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 

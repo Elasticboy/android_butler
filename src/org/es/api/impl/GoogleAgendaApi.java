@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
-import android.text.SpannableStringBuilder;
 import android.text.format.Time;
 
 import org.es.api.AgendaApi;
@@ -70,33 +69,6 @@ public class GoogleAgendaApi implements AgendaApi {
         long endMillis = dayStart.toMillis(false) + 86400_000l + 10_000l;
 
         return readCalendarEvent(context, startMillis, endMillis, restrictionList);
-
-//        // Run query
-//        Uri uri = Calendars.CONTENT_URI;
-//        String calendarSelection = "((" + Calendars.ACCOUNT_NAME + " = ?) AND ("
-//                + Calendars.ACCOUNT_TYPE + " = ?) AND ("
-//                + Calendars.OWNER_ACCOUNT + " = ?))";
-//        String[] calendarSelectionArgs = new String[]{email, "com.google", email};
-//
-//        ContentResolver resolver = context.getContentResolver();
-//        // Submit the query and get a Cursor object back.
-//        Cursor calendarCursor = resolver.query(uri, CALENDAR_PROJECTION, calendarSelection, calendarSelectionArgs, null);
-//
-//        // Use the cursor to step through the returned records
-//        while (calendarCursor.moveToNext()) {
-//            long calID = 0;
-//            String displayName = null;
-//            String accountName = null;
-//            String ownerName = null;
-//
-//            // Get the field values
-//            calID       = calendarCursor.getLong(PROJECTION_ID_INDEX);
-//            displayName = calendarCursor.getString(PROJECTION_DISPLAY_NAME_INDEX);
-//            accountName = calendarCursor.getString(PROJECTION_ACCOUNT_NAME_INDEX);
-//            ownerName   = calendarCursor.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
-//
-//            getEvents()
-//        }
     }
 
     @Override
@@ -111,18 +83,6 @@ public class GoogleAgendaApi implements AgendaApi {
 
         return readCalendarEvent(context, startMillis, endMillis, restrictionList);
     }
-
-//    private String getOwnerAccount(Context context) {
-//        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
-//        Account[] accounts = AccountManager.get(context).getAccounts();
-//        for (Account account : accounts) {
-//            if (emailPattern.matcher(account.name).matches()) {
-//                return account.name;
-//            }
-//        }
-//
-//        return null;
-//    }
 
     private List<AgendaEvent> readCalendarEvent(Context context, long startDate, long endDate, List<String> restrictionList) {
 

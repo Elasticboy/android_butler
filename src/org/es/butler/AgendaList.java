@@ -10,7 +10,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.es.api.AgendaApi;
-import org.es.api.dao.AgendaDao;
 import org.es.api.factory.AgendaApiFactory;
 import org.es.api.pojo.Agenda;
 import org.es.butler.component.AgendaAdapter;
