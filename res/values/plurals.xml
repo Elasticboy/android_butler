@@ -4,13 +4,13 @@
     <plurals name="today_appointments">
         <item quantity="zero">You have no appointment today.</item>
         <item quantity="one">You have one appointment today.</item>
-        <item quantity="other">You have %d appointments today.</item>
+        <item quantity="other">You have %1$d appointments today.</item>
     </plurals>
 
     <plurals name="upcoming_appointments">
         <item quantity="zero">You have no upcoming appointment.</item>
         <item quantity="one">You have one upcoming appointment.</item>
-        <item quantity="other">You have %d upcoming appointments.</item>
+        <item quantity="other">You have %1$d upcoming appointments.</item>
     </plurals>
 
 </resources>

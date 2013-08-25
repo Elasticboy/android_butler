@@ -32,9 +32,9 @@ public class AgendaLogic implements PronunciationLogic {
 
         StringBuilder sb = new StringBuilder();
         if (mToday) {
-            sb.append(context.getResources().getQuantityString(R.plurals.today_appointments, count, count));
+            sb.append(context.getResources().getQuantityString(R.plurals.today_appointments, count));
         } else {
-            sb.append(context.getResources().getQuantityString(R.plurals.upcoming_appointments, count, count));
+            sb.append(context.getResources().getQuantityString(R.plurals.upcoming_appointments, count));
         }
 
         if (count == 0) {
