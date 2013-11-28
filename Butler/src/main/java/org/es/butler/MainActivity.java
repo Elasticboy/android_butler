@@ -116,6 +116,7 @@ public class MainActivity extends Activity implements OnInitListener, OnClickLis
         }
 
         int result = TextToSpeech.LANG_MISSING_DATA;
+        //result = mTTS.setLanguage(Locale.getDefault());
         if (mTTS.isLanguageAvailable(Locale.UK) == TextToSpeech.LANG_AVAILABLE) {
             result = mTTS.setLanguage(Locale.UK);
         } else {
